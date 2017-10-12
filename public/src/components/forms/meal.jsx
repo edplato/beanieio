@@ -36,7 +36,7 @@ export default class Meal extends Component {
   handleSubmitImg(e) {
     e && e.preventDefault();
     console.log('This .state file --> ',this.state.file);
-    this.postingPics();
+    this.postingPics(this.state.file);
   }
 
     handleImageUpload(e) {
@@ -52,11 +52,12 @@ export default class Meal extends Component {
       });
     }
     reader.readAsDataURL(file)
+    this.postingPics(file);
   }
 
-  postingPics() {
+  postingPics(file) {
     var fd = new FormData();
-    fd.append('image',this.state.file);
+    fd.append('image',file);
     axios.post('/api/clarifai',fd)
       .then((res) => {
         console.log('Success --> ',res.data[0].data.concepts);
@@ -74,13 +75,14 @@ export default class Meal extends Component {
   // stop propagation on clicks allows form interaction to be contained within the form
   // otherwise dashboard-level click handlers would also fire... not helpful!
   render() {
-    // let {imagePreviewUrl} = this.state;
-    // let {$imagePreview} = null;
-    // if (imagePreviewUrl) {
-    //   $imagePreview = (<img src={imagePreviewUrl} />)
-    // } else {
-    //   $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
-    // }
+    let {imagePreviewUrl} = this.state;
+    let $imagePreview = null;
+    if (imagePreviewUrl) {
+      $imagePreview = (<img src={imagePreviewUrl} />);
+      console.log('Image --> ',$imagePreview)
+    } else {
+      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+    }
     return (
       <div className="form-wrapper shadow" onClick={e => e.stopPropagation()}>
         <div className="form-header flex flex-align-center space-between">
@@ -94,6 +96,7 @@ export default class Meal extends Component {
               <input type="submit" value="Upload" />
             </form>
           <div className="imgPreview">
+            {$imagePreview}
         </div>
       </div>
     );
