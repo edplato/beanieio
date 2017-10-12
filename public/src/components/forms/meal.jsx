@@ -35,7 +35,8 @@ export default class Meal extends Component {
 
   handleSubmitImg(e) {
     e && e.preventDefault();
-    console.log('handle uploading --> ',this.state.file);
+    console.log('This .state file --> ',this.state.file);
+    this.postingPics();
   }
 
     handleImageUpload(e) {
@@ -51,20 +52,23 @@ export default class Meal extends Component {
       });
     }
     reader.readAsDataURL(file)
-      console.log('It comes here --> ',this.state.imagePreviewUrl);
   }
 
+  postingPics() {
+    var fd = new FormData();
+    fd.append('image',this.state.file);
+    axios.post('/api/clarifai',fd)
+      .then((res) => {
+        console.log('Success --> ',res.data[0].data.concepts);
+      })
+      .catch((err) =>  {
+        console.log('Error --> ',err);
+     })
+  }
 
 
   uploadedPic(event) {
     // console.log('It comes here event --> ',event.target);
-    axios.post('/api/clarifai',this.state.file)
-      .then((res) => {
-        console.log('Success --> ',res);
-      })
-      .catch((err) =>  {
-        console.log('Error --> ',err);
-      })
   }
   
   // stop propagation on clicks allows form interaction to be contained within the form
