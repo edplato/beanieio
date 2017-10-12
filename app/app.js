@@ -22,7 +22,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 // env setup
 const debug = process.env.DEBUG || false;
 const httpPort = process.env.HTTP_PORT || 8080;
-const httpsPort = process.env.HTTPS_PORT || 8443;
+// const httpsPort = process.env.HTTPS_PORT || 8443;
 
 // auth setup
 const jwt = require('jsonwebtoken');
@@ -179,4 +179,4 @@ app.get('*', (req, res) => {
 
 module.exports.app = app;
 module.exports.httpPort = httpPort;
-module.exports.httpsPort = httpsPort;
+// module.exports.httpsPort = httpsPort;

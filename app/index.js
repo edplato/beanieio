@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
+// const https = require('https');
 const http = require('http');
-const { app, httpPort, httpsPort } = require('./app.js');
+const { app, httpPort /*, httpsPort*/ } = require('./app.js');
 
 // const httpsOptions = {
 //   key: fs.readFileSync(path.join(__dirname, 'cert', 'domain.key')),
