@@ -7,8 +7,7 @@ const morgan = require('morgan');
 
 // multer
 const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ dest: './uploads/' });
 
 // clarifai
 const Clarifai = require('clarifai');
@@ -128,32 +127,39 @@ app.post('/api/formdata', jwtAuth(), (req, res) => {
     .catch(err => res.status(500).send('Server error', err));
 });
 
-// Post route for single images to be analyzed by Clarifai visual recognition.
+// Post route for single images to be saved to disk and analyzed by Clarifai visual recognition.
 // upload.fields is mutler middleware that requires formData with a name field.
-// This approach uses images stored in memory and not saved to disk.
 // File size is currently limited to 10mb through bodyParser.
 app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) => {
-  console.log(req.files);
-
-  // Save image from memory buffer to Base64 for Clarifai API bytes option
-  req.imageBase64 = new Buffer(req.files.image[0].buffer).toString('base64');
+  // get uploaded image file path and add to request
+  let originalImageFilePath = path.join(__dirname, '/../', req.files.image[0].path);
+  req.imagePath = originalImageFilePath;
   next();
 }, (req, res) => {
-  // create new clarifai instance using API key
-  const clarifaiApp = new Clarifai.App({apiKey: configKey.clarifaiKey});
-
-  // use specific 'food' model("bd..." string) and object with our base64 image
-  clarifaiApp.models.predict("bd367be194cf45149e75f01d59f77ba7", {base64: req.imageBase64}).then(
-    function(response) {
-      // response.outputs is the parent array of objects where our food prediction data is stored
-      console.log('Clarifai SUCCESS: ', response.outputs);
-      res.send(response.outputs);
-    },
-    function(err) {
-      console.log('Clarifai ERROR: ', err);
-      res.send('ERROR');
+  // read image file from uploads folder
+  fs.readFile(req.imagePath, (err, data) => {
+    if(err) {
+      console.log('Read Image File Error: ', err);
+      res.status(500).send('Server error', err);
+    } else {
+    // create new clarifai instance using API key
+    let clarifaiApp = new Clarifai.App({apiKey: configKey.clarifaiKey});
+    // Save image from memory buffer to Base64 for Clarifai API bytes option
+    let imageBase64 = new Buffer(data).toString('base64');
+    // use specific 'food' model("bd..." string) and object with our base64 image
+    clarifaiApp.models.predict("bd367be194cf45149e75f01d59f77ba7", {base64: imageBase64 }).then(
+      (results) => {
+        // results.outputs is the parent array of objects where our food prediction data is stored
+        console.log('Clarifai Success: ', results.outputs);
+        res.send(results.outputs);
+      },
+      (err) => {
+        console.log('Clarifai Error: ', err);
+        res.status(500).send('Server error', err);
+      }
+    );
     }
-  );
+  })
 });
 
 app.get('*', (req, res) => {
