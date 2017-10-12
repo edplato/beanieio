@@ -11,7 +11,9 @@ const upload = multer({ dest: './uploads/' });
 
 // clarifai
 const Clarifai = require('clarifai');
-const configKey = require('../config/config');
+if (!process.env.PRODUCTION) {
+  const configKey = require('../config/config');
+}
 
 // db setup
 const { User, Entry } = require('./models/models.js');
