@@ -14,6 +14,7 @@
     "startproddebug": "DEBUG=true HTTP_PORT=8080 HTTPS_PORT=8443 nodemon app/index.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+<<<<<<< 2e8f155b85538f3b1d52a9f2504b29a266be8f8f
 <<<<<<< bc530fea05322a5f6b80442ad7dd5668dd2a47f7
 <<<<<<< cdb706b0fa2c21f7bfb82f828630380b66d53c08
     "heroku-postbuild": "webpack && npm run startprod"
@@ -24,6 +25,10 @@
 =======
     "heroku-postbuild": "webpack && npm run startprod"
 >>>>>>> Fixed package.json
+=======
+    "start-heroku": "node app/index.js",
+    "heroku-postbuild": "webpack"
+>>>>>>> Modified heroku-postbuild
   },
   "repository": {
     "type": "git",
