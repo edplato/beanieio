@@ -162,6 +162,12 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
   })
 });
 
+app.post('/picture',(req,res) => {
+
+  console.log('It comes here');
+  console.log('Req.body ---> ',req.body);
+})
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '/public/index.html'));
 });

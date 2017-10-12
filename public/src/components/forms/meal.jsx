@@ -14,7 +14,8 @@ export default class Meal extends Component {
     this.state = {
       ingredientsTags: [],
       datetime: new Date(),
-      showCamera:false
+      file:'',
+      imagePreviewUrl:''
     };
   }
 
@@ -32,15 +33,50 @@ export default class Meal extends Component {
       }).catch((err) => console.log('error: ', err));
   }
 
-  handleItemClick() {
-    this.setState({
-      showCamera: !this.state.showDetails
-    });
+  handleSubmitImg(e) {
+    e && e.preventDefault();
+    console.log('handle uploading --> ',this.state.file);
+  }
+
+    handleImageUpload(e) {
+       e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file)
+      console.log('It comes here --> ',this.state.imagePreviewUrl);
+  }
+
+
+
+  uploadedPic(event) {
+    // console.log('It comes here event --> ',event.target);
+    axios.post('/api/clarifai',this.state.file)
+      .then((res) => {
+        console.log('Success --> ',res);
+      })
+      .catch((err) =>  {
+        console.log('Error --> ',err);
+      })
   }
   
   // stop propagation on clicks allows form interaction to be contained within the form
   // otherwise dashboard-level click handlers would also fire... not helpful!
   render() {
+    // let {imagePreviewUrl} = this.state;
+    // let {$imagePreview} = null;
+    // if (imagePreviewUrl) {
+    //   $imagePreview = (<img src={imagePreviewUrl} />)
+    // } else {
+    //   $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+    // }
     return (
       <div className="form-wrapper shadow" onClick={e => e.stopPropagation()}>
         <div className="form-header flex flex-align-center space-between">
@@ -49,28 +85,30 @@ export default class Meal extends Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-            <form action="/" method="post" enctype="multipart/form-data">
-              <input type="file" name="image" accept="image/*" capture="user" />
+          <form action="/picture" method="post" onSubmit={(e)=>this.handleSubmitImg(e)}>
+              <input type="file" name="image" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} />
               <input type="submit" value="Upload" />
             </form>
-        <form onSubmit={e => this.handleSubmit(e)}>
-       <div className="form-select">
-           <div className="mdi mdi-camera"/>
-            <Multiselect className="form-multiselect" data={this.props.formConfigData}
-              onChange={v => this.setState({ingredientsTags: v})} placeholder="Type or select ingredients here"
-              value={this.state.ingredientsTags}
-            />
-          </div>
-          <div className="form-group flex flex-align-center">
-            <DateTimePicker id="datetime" className="form-datetimepicker"
-              onChange={v => this.setState({datetime: v})} value={this.state.datetime}
-            />
-          </div>
-          <div className="form-submit-section flex flex-center">
-            <button type="submit" className="btn form-submit-btn shadow">Submit</button>
-          </div>
-        </form>
+          <div className="imgPreview">
+        </div>
       </div>
     );
   }
 }
+       //  <form onSubmit={e => this.handleSubmit(e)}>
+       // <div className="form-select">
+       //     <div className="mdi mdi-camera"/>
+       //      <Multiselect className="form-multiselect" data={this.props.formConfigData}
+       //        onChange={v => this.setState({ingredientsTags: v})} placeholder="Type or select ingredients here"
+       //        value={this.state.ingredientsTags}
+       //      />
+       //    </div>
+       //    <div className="form-group flex flex-align-center">
+       //      <DateTimePicker id="datetime" className="form-datetimepicker"
+       //        onChange={v => this.setState({datetime: v})} value={this.state.datetime}
+       //      />
+       //    </div>
+       //    <div className="form-submit-section flex flex-center">
+       //      <button type="submit" className="btn form-submit-btn shadow">Submit</button>
+       //    </div>
+       //  </form>
