@@ -38,11 +38,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
 
 // redirect non secure traffic to https
-const httpsRoute = function (req, res, next) {
-  if (debug) { console.log((req.secure ? 'Secure' : 'Insecure') + ' connection received to: ', req.url); }
-  if (req.secure) { next(); } else { res.redirect('https://' + req.hostname + req.path); }
-};
-app.get('*', httpsRoute);
+// const httpsRoute = function (req, res, next) {
+//   if (debug) { console.log((req.secure ? 'Secure' : 'Insecure') + ' connection received to: ', req.url); }
+//   if (req.secure) { next(); } else { res.redirect('https://' + req.hostname + req.path); }
+// };
+// app.get('*', httpsRoute);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
