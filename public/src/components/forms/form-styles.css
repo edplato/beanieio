@@ -36,6 +36,7 @@
 }
 
 .form-multiselect {
+  display: inline-block;
   margin-bottom: 20px;
 }
 
@@ -55,3 +56,18 @@
 .form-submit-btn:focus:active {
   box-shadow: none !important;
 }
+.form-select {
+  font-size: 16px;
+  display: inline-block;
+  color: var(--b5);
+}
+.mdi {
+  text-align: center;
+  display: block;
+  font-size: 34px;
+}
+.camera-options{
+  text-align: left;
+}
+
+

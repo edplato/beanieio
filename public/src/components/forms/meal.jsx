@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
+import Camera from './camera.jsx';
 import { Multiselect, DateTimePicker } from 'react-widgets';
 import './form-styles.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -13,6 +14,7 @@ export default class Meal extends Component {
     this.state = {
       ingredientsTags: [],
       datetime: new Date(),
+      showCamera:false
     };
   }
 
@@ -29,6 +31,12 @@ export default class Meal extends Component {
         this.props.signalFormSubmitted('Meal');
       }).catch((err) => console.log('error: ', err));
   }
+
+  handleItemClick() {
+    this.setState({
+      showCamera: !this.state.showDetails
+    });
+  }
   
   // stop propagation on clicks allows form interaction to be contained within the form
   // otherwise dashboard-level click handlers would also fire... not helpful!
@@ -41,8 +49,13 @@ export default class Meal extends Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+            <form action="/" method="post" enctype="multipart/form-data">
+              <input type="file" name="image" accept="image/*" capture="user" />
+              <input type="submit" value="Upload" />
+            </form>
         <form onSubmit={e => this.handleSubmit(e)}>
-          <div className="form-group flex flex-align-center">
+       <div className="form-select">
+           <div className="mdi mdi-camera"/>
             <Multiselect className="form-multiselect" data={this.props.formConfigData}
               onChange={v => this.setState({ingredientsTags: v})} placeholder="Type or select ingredients here"
               value={this.state.ingredientsTags}
