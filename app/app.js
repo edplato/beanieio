@@ -1,8 +1,18 @@
 // libraries
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+
+// multer
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// clarifai
+const Clarifai = require('clarifai');
+const configKey = require('../config/config');
 
 // db setup
 const { User, Entry } = require('./models/models.js');
@@ -24,7 +34,7 @@ const correlationHandler = require('./handlers/correlation-data.js');
 const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
 
 // redirect non secure traffic to https
 const httpsRoute = function (req, res, next) {
@@ -116,6 +126,34 @@ app.post('/api/formdata', jwtAuth(), (req, res) => {
   return entry.save(entry)
     .then(() => res.status(201).send('Entry created'))
     .catch(err => res.status(500).send('Server error', err));
+});
+
+// Post route for single images to be analyzed by Clarifai visual recognition.
+// upload.fields is mutler middleware that requires formData with a name field.
+// This approach uses images stored in memory and not saved to disk.
+// File size is currently limited to 10mb through bodyParser.
+app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) => {
+  console.log(req.files);
+
+  // Save image from memory buffer to Base64 for Clarifai API bytes option
+  req.imageBase64 = new Buffer(req.files.image[0].buffer).toString('base64');
+  next();
+}, (req, res) => {
+  // create new clarifai instance using API key
+  const clarifaiApp = new Clarifai.App({apiKey: configKey.clarifaiKey});
+
+  // use specific 'food' model("bd..." string) and object with our base64 image
+  clarifaiApp.models.predict("bd367be194cf45149e75f01d59f77ba7", {base64: req.imageBase64}).then(
+    function(response) {
+      // response.outputs is the parent array of objects where our food prediction data is stored
+      console.log('Clarifai SUCCESS: ', response.outputs);
+      res.send(response.outputs);
+    },
+    function(err) {
+      console.log('Clarifai ERROR: ', err);
+      res.send('ERROR');
+    }
+  );
 });
 
 app.get('*', (req, res) => {
