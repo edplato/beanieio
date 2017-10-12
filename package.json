@@ -2,6 +2,9 @@
   "name": "beanieio",
   "version": "1.0.0",
   "description": "Health journalling app - hr greenfield 1",
+  "engines" : {
+    "node": "6.11.3"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
