@@ -1,5 +1,8 @@
 language: node_js
+<<<<<<< cdb706b0fa2c21f7bfb82f828630380b66d53c08
 node_js: "6.11.3"
+=======
+>>>>>>> Add travis.yml
 deploy:
   provider: heroku
   api_key:
