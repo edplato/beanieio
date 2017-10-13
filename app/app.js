@@ -21,7 +21,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 // env setup
 const debug = process.env.DEBUG || false;
-const httpPort = process.env.HTTP_PORT || 8080;
+const httpPort = process.env.PORT || 8080;
 // const httpsPort = process.env.HTTPS_PORT || 8443;
 
 // auth setup
@@ -146,7 +146,7 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
       res.status(500).send('Server error', err);
     } else {
     // create new clarifai instance using API key
-    let clarifaiApp = new Clarifai.App({apiKey: PROCESS.ENV.CLARIFAI_KEY || configKey.clarifaiKey});
+    let clarifaiApp = new Clarifai.App({apiKey: process.env.CLARIFAI_KEY || configKey.clarifaiKey});
     // Save image from memory buffer to Base64 for Clarifai API bytes option
     let imageBase64 = new Buffer(data).toString('base64');
     // use specific 'food' model("bd..." string) and object with our base64 image
