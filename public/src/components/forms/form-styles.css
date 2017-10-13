@@ -99,6 +99,7 @@ img{
   text-align: center;
 }
 .notselected{
+  text-align: center;
   padding: 10px;
   margin-left: 10px;
   background: white;
@@ -109,6 +110,7 @@ img{
   cursor: pointer;
 }
 .selected {
+  text-align: center;
    padding: 10px;
   margin-left: 10px;
   background: #efefef;
@@ -121,7 +123,7 @@ img{
 
 .products {
   text-align: center;
-  margin-left: 70px;
+  margin-left: 20px;
   width:250px;
   height: 100px;
 }
