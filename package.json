@@ -67,6 +67,7 @@
     "react-widgets-moment": "^4.0.2",
     "redux": "^3.7.2",
     "style-loader": "^0.18.2",
+    "try-require": "^1.2.1",
     "url-loader": "^0.5.9",
     "webpack": "^3.6.0"
   },

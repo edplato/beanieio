@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const tryRequire = require('try-require');
 
 // multer
 const multer = require('multer');
@@ -13,15 +14,14 @@ const upload = multer({ dest: './uploads/' });
 
 // clarifai
 const Clarifai = require('clarifai');
-let configKey = process.env.PRODUCTION === true ? '' : require('../config/config');
-  // const configKey = require('../config/config');
+const configKey = tryRequire('../config/config');
 
+
+// Google Cloud
 const config = process.env.GCLOUD || {
   projectId: 'testproject-173217',
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
-
-// Google Cloud
 const Language = require('@google-cloud/language')(config);
 const language = Language;
 
@@ -156,6 +156,7 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
       res.status(500).send('Server error', err);
     } else {
     // create new clarifai instance using API key
+    console.log('process.env.CLARIFAI_KEY', process.env.CLARIFAI_KEY);
     let keys =  process.env.CLARIFAI_KEY || configKey.clarifaiKey;
     let clarifaiApp = new Clarifai.App({apiKey:keys});
     // Save image from memory buffer to Base64 for Clarifai API bytes option
