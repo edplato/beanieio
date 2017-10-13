@@ -6,7 +6,7 @@ export default class Journal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      entry: '',
+      journalEntry: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -14,7 +14,14 @@ export default class Journal extends Component {
 
   handleSubmit(e) {
     e && e.preventDefault();
-    console.log(this.state.entry);
+    let formData = {
+      journalEntry: this.state.journalEntry
+    };
+
+    axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.auth()}})
+      .then((res) => {
+        console.log('Received from server: ', res);
+      }).catch((err) => console.log('error: ', err));
   }
 
 
@@ -23,7 +30,7 @@ export default class Journal extends Component {
       <div className="journal-container">
         <div className="journal-header"><span>Journal</span></div>
           <div className="journal-content">
-            <form onChange={e => this.setState({entry: e.target.value})}  onSubmit={this.handleSubmit} >
+            <form onChange={e => this.setState({journalEntry: e.target.value})}  onSubmit={this.handleSubmit} >
               <textarea placeholder="Enter a journal entry" />
               <input type="submit" />
             </form>
