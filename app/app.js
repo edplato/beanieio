@@ -13,7 +13,7 @@ const upload = multer({ dest: './uploads/' });
 
 // clarifai
 const Clarifai = require('clarifai');
-let configKey = !process.env.PRODUCTION || require('../config/config');
+let configKey = process.env.PRODUCTION === true ? '' : require('../config/config');
   // const configKey = require('../config/config');
 
 const config = process.env.GCLOUD || {
