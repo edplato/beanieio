@@ -51,6 +51,7 @@
 }
 
 .config-list {
+  overflow: auto;
   padding: 5px;
   flex: 1;
 }

@@ -1,5 +1,7 @@
 // libraries
 const express = require('express');
+const { check, validationResult } = require('express-validator/check');
+const { matchedData, sanitize, sanitizeBody } = require('express-validator/filter');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
@@ -15,8 +17,17 @@ if (!process.env.PRODUCTION) {
   const configKey = require('../config/config');
 }
 
+const config = {
+  projectId: 'testproject-173217',
+  keyFilename: './config/testproject-0ec8021d1e1c.json'
+};
+
+// Google Cloud
+const Language = require('@google-cloud/language')(config);
+const language = Language;
+
 // db setup
-const { User, Entry } = require('./models/models.js');
+const { User, Entry, Journal } = require('./models/models.js');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // env setup
@@ -164,6 +175,65 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
     }
   })
 });
+
+
+// Post route for Google Natural Language API Sentiment Analysis feature
+// https://cloud.google.com/natural-language/
+// input text from the body is analyzed for sentiment and will return different scores.
+// Our primary interest is in the sentiment score and sentiment magnitude of the entire
+// text, however individual sentences and even words can be further analyzed.
+
+// Sentiment scores range from -1.0 (negative) to 0.0 (neutral) to 1.0 (positive)
+// Magnitude scores have an undeterminate range depending on sentiment scores and content.
+// A document with a neutral score (around 0.0) may indicate a low-emotion document, or may indicate mixed emotions, with both high positive and negative values which cancel each out.
+
+// Clearly Positive* "score": 0.8, "magnitude": 3.0
+// Clearly Negative* "score": -0.6, "magnitude": 4.0
+// Neutral "score": 0.1, "magnitude": 0.0
+// Mixed "score": 0.0, "magnitude": 4.0
+app.post('/api/language', sanitizeBody('journalEntry').escape().trim(), (req, res) => {
+
+  console.log(req.body);
+  let textAnalysis = req.body.journalEntry;
+
+  const document = {
+    'content': textAnalysis,
+    type: 'PLAIN_TEXT'
+  };
+
+  language.analyzeSentiment({'document': document})
+    .then((results) => {
+      const sentiment = results[0].documentSentiment;
+
+      // console.log(`Sentiment score: ${sentiment.score}`);
+      // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+
+      return sentiment;
+    })
+    .then((sentiment) => {
+      var journalEntry = new Journal({
+        userId: req.user._id,
+        datetime: req.body.datetime,
+        text: textAnalysis,
+        sentimentScore: sentiment.score,
+        sentimentMagnitude: sentiment.magnitude
+      })
+
+      return journalEntry.save((err, success) => {
+        if(err) {
+          console.log('ERROR', err);
+          res.status(500).send('Server error', err);
+        } else {
+          res.status(200).send('Saved journalEntry');
+        }
+      })
+    })
+    .catch((err) => {
+      console.error('ERROR:', err);
+      res.status(500).send('Server error', err);
+    });
+});
+
 
 app.post('/picture',(req,res) => {
 
