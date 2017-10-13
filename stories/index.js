@@ -5,11 +5,12 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
 import { Button, Welcome } from '@storybook/react/demo';
+import Journal from '../public/src/components/journal/journal.jsx';
 
-import App from '../public/src/components/app.jsx';
+// import App from '../public/src/components/app.jsx';
 import '../public/styles/styles.css';
-import '../public/src/components/app.css';
-import '../public/styles/entry-styles.css';
+// import '../public/src/components/app.css';
+// import '../public/styles/entry-styles.css';
 
 // activity feed entries
 // import PulseCheckEntry from '../public/src/components/entries/pulse-check-entry.jsx';
@@ -22,11 +23,19 @@ import '../public/styles/entry-styles.css';
 // chart modules
 // import PieReport from '../public/src/components/reports/pie-report';
 
-// storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
-// storiesOf('Button', module)
-//   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-//   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+storiesOf('Button', module)
+  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
+  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+
+storiesOf('Journal', module)
+  .add('basic', () => (
+    <div>
+      <Journal />
+    </div>
+  ));
+
 
 // storiesOf('App', module)
 //   .add('basic', () => <App />);

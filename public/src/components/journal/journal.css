@@ -1,0 +1,21 @@
+.journal-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.journal-header {
+    display: flex;
+    padding: 5px 10px;
+    background: var(--b5);
+    color: white;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.journal-content {
+  display: flex;
+  flex: 1;
+  align-content: center;
+  padding: 10px;
+}

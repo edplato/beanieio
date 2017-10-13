@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './journal.css';
 
 export default class Journal extends Component {
   constructor(props) {
@@ -12,11 +13,15 @@ export default class Journal extends Component {
 
   render() {
     return (
-      <div>
-        <h1>This is the journal component</h1>
-        <form onChange={e => this.setState({entry: e.target.value})}>
-          <textarea placeholder="Enter a journal entry" />
-        </form>
+      <div className="journal-container">
+        <div className="journal-header"><span>Journal</span></div>
+          <div className="journal-content">
+            <form onChange={e => this.setState({entry: e.target.value})}>
+              <textarea placeholder="Enter a journal entry" />
+              <input type="submit" />
+            </form>
+          </div>
+
       </div>
     )
   }
