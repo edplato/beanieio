@@ -18,7 +18,7 @@ export default class Journal extends Component {
       journalEntry: this.state.journalEntry
     };
 
-    axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.auth()}})
+    axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
       .then((res) => {
         console.log('Received from server: ', res);
       }).catch((err) => console.log('error: ', err));

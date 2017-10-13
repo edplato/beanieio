@@ -191,7 +191,7 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
 // Clearly Negative* "score": -0.6, "magnitude": 4.0
 // Neutral "score": 0.1, "magnitude": 0.0
 // Mixed "score": 0.0, "magnitude": 4.0
-app.post('/api/language', sanitizeBody('journalEntry').escape().trim(), (req, res) => {
+app.post('/api/language', jwtAuth(), sanitizeBody('journalEntry').escape().trim(), (req, res) => {
 
   console.log(req.body);
   let textAnalysis = req.body.journalEntry;
@@ -224,6 +224,7 @@ app.post('/api/language', sanitizeBody('journalEntry').escape().trim(), (req, re
           console.log('ERROR', err);
           res.status(500).send('Server error', err);
         } else {
+          console.log('Sentiment: ', success);
           res.status(200).send('Saved journalEntry');
         }
       })
