@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import './form-styles.css';
 import Product from './Product.jsx';
+import { Multiselect } from 'react-widgets';
 class Camera extends Component {
   constructor(props) {
     super(props);
     this.collectProducts = this.collectProducts.bind(this);
     this.onClose = this.onClose.bind(this);
+    let arr = this.props.products.reduce((total,el) => {
+      total.push(el.name)
+      return total;
+    } ,[]);
+    console.log('Arr --> ',arr);
     this.state = {
-      food: {}
+      food: {},
+      ingredients:[],
+      formData:arr
     }
   }
   collectProducts(name,bool){
@@ -16,7 +24,11 @@ class Camera extends Component {
     } else {
       delete this.state.food[name];
     }
-    console.log('Products --> ',this.state.food);
+  //  console.log('Products --> ',this.state.food);
+  let arr = Object.keys(this.state.food);
+  this.setState({
+    ingredients:arr
+    });
   }
   onClose() {
     this.props.onClose(this.state.food);
@@ -31,7 +43,7 @@ class Camera extends Component {
           <div className="imgPreview">
             {this.props.imageView}
           </div>
-        <div className="center">
+        <div className="flex flex-center">
         <h2> Products in your food </h2>
         </div>
           <div className="products">
@@ -39,9 +51,14 @@ class Camera extends Component {
             <Product product={item} addItems={this.collectProducts}/>
           )}
           </div>
-      </div>
+    </div>
     );
   }
 }
 
 export default Camera;
+           // <Multiselect className="form-multiselect" 
+           //    data={this.state.formData}
+           //    onChange={v => this.setState({ingredients: v})} placeholder="Type or select ingredients here"
+           //    value={this.state.ingredients}
+           //  />

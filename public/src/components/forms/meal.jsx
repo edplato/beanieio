@@ -7,6 +7,7 @@ import Product from './Product.jsx';
 import { Multiselect, DateTimePicker } from 'react-widgets';
 import './form-styles.css';
 import Modal from 'react-modal';
+//import { Modal, ModalBody} from 'react-modal-bootstrap';
 import 'react-widgets/dist/css/react-widgets.css';
 momentLocalizer();
 
@@ -126,7 +127,6 @@ export default class Meal extends Component {
        <Modal
           isOpen={this.state.showDetails}
           onRequestHide={this.handleItemClick}
-          style={customStyles}
           onClose={this.handleItemClick}
         >
           <Camera imageView={$imagePreview} products={this.state.data} onClose={this.getProducts}/> 
