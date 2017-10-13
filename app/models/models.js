@@ -67,6 +67,15 @@ const entrySchema = new Schema({
   emotionalTags: [String]
 });
 
+const journalSchema = new Schema({
+  userId: String,
+  datetime: String,
+  text: String,
+  sentimentScore: Number,
+  sentimentMagnitude: Number
+});
+
 module.exports.User = mongoose.model('User', userSchema);
 module.exports.Entry = mongoose.model('Entry', entrySchema);
+module.exports.Journal = mongoose.model('Journal', journalSchema);
 module.exports.mongoose = mongoose;
