@@ -16,7 +16,7 @@ const Clarifai = require('clarifai');
 let configKey = !process.env.PRODUCTION || require('../config/config');
   // const configKey = require('../config/config');
 
-const config = {
+const config = process.env.GCLOUD || {
   projectId: 'testproject-173217',
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
