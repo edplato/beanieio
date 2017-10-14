@@ -89,10 +89,11 @@ export default class RatingsLineChart extends Component {
     if (debug) { console.log('Ratings-Line-Chart will rec: ', props.data); }
 
     var comboData = props.data;
-
-    props.journals.forEach((journal) => {
-      comboData[2] = journal
-    })
+    if(props.data) {
+      props.journals.forEach((journal) => {
+        comboData[2] = journal
+      })
+    }
 
     this.chart.data.datasets = comboData;
     this.chart.update();
