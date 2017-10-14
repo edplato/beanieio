@@ -83,7 +83,7 @@ export default class RatingsLineReport extends Component {
         });
 
         _.forIn(data, (value, key) => {
-          journalData.push({x: new Date(key), y: (value.sum.toFixed(2)/1) / value.count});
+          journalData.push({x: new Date(key), y: ((value.sum / value.count).toFixed(2)/1)});
         });
 
       datasets.push({label: "Journal Sentiment", yAxisID: "sentiment-y-axis", pointBorderWidth: 3, borderDash: [2], borderDashOffset: 2, data: journalData, fill: false, borderColor: '#067E9A'});
