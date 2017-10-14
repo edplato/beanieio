@@ -25,7 +25,8 @@ export default class RatingsLineReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [ ]
+      data: [ ],
+      journals: [ ],
     };
     this.entryType = this.props.type || 'combo';
     this.fields = this.props.fields;
@@ -43,6 +44,14 @@ export default class RatingsLineReport extends Component {
       headers: {'Authorization': 'bearer ' + this.props.auth()}
     }).then(res => {
       this.filterData(res.data);
+    });
+
+    axios.get('/api/journal', {
+      params: {limit: 5},
+      headers: {'Authorization': 'bearer ' + this.props.auth()}
+    }).then(res => {
+      console.log('JOURNALS', res);
+      this.setState({journals: res.data});
     });
   }
 
@@ -86,7 +95,7 @@ export default class RatingsLineReport extends Component {
       <div className="report-container">
         <div className="report-header">{this.props.title}</div>
         <div className="report-content">
-          <RatingsLineChart data={this.state.data} id={`line-chart-${this.entryType.toLowerCase()}`}/>
+          <RatingsLineChart data={this.state.data} journals={this.state.journals} id={`line-chart-${this.entryType.toLowerCase()}`}/>
         </div>
       </div>
     );

@@ -81,6 +81,16 @@ app.get('/api/users/formconfig', jwtAuth(), (req, res) => {
     });
 });
 
+app.get('/api/journal', jwtAuth(), (req, res) => {
+  if (debug) { console.log('Get request journal for: ', req.user); }
+  let q = {userId: ObjectId(req.user._id)};
+  if (req.query.type) { q.type = req.query.type; }
+  Journal.find(q).limit(req.query.limit ? req.query.limit * 1 : 5).sort({datetime: -1})
+    .exec().then(journals => {
+      res.status(200).json(journals);
+    }).catch(err => res.status(500).send('Server error: ', err));
+});
+
 app.put('/api/users/formconfig', jwtAuth(), (req, res) => {
   if (debug) { console.log('Post request formconfig for: ', req.user); }
   if (debug) { console.log('Formconfig data posted is: ', req.body); }
