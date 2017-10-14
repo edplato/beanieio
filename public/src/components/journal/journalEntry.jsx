@@ -8,6 +8,7 @@ export default class JournalEntry extends Component {
     super(props);
     this.state = {
       journalEntry: '',
+      isNewEntry: true
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -35,7 +36,7 @@ export default class JournalEntry extends Component {
             <form onChange={e => this.setState({journalEntry: e.target.value})}  onSubmit={this.handleSubmit} >
               <textarea className="journalEntry-area" placeholder="How was your day?" />
               <div className="journal-submit-section flex flex-center">
-                <button type="submit" className="btn journal-submit-btn shadow">Submit</button>
+                {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
               </div>
             </form>
           </div>

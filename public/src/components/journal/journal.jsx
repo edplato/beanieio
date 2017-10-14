@@ -32,9 +32,8 @@ export default class Journal extends Component {
       <div className="journal-container">
         <div className="journal-header"><span>Journal</span></div>
           <div className="journal-window">
-            <JournalEntry />
+            <JournalEntry getAuth={this.props.getAuth} />
           </div>
-
       </div>
     )
   }
