@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './journal.css';
+import '../forms/form-styles.css';
 
 export default class JournalEntry extends Component {
   constructor(props) {
@@ -32,8 +33,10 @@ export default class JournalEntry extends Component {
         <div className="journalEntry-header"><span>New Entry</span></div>
           <div className="journalEntry-content">
             <form onChange={e => this.setState({journalEntry: e.target.value})}  onSubmit={this.handleSubmit} >
-              <textarea className="journalEntry-area" placeholder="Enter a journal entry" />
-              <input type="submit" />
+              <textarea className="journalEntry-area" placeholder="How was your day?" />
+              <div className="journal-submit-section flex flex-center">
+                <button type="submit" className="btn journal-submit-btn shadow">Submit</button>
+              </div>
             </form>
           </div>
 
