@@ -11,7 +11,9 @@ export default class JournalEntry extends Component {
       journalEntry: '',
       isNewEntry: true,
       currentEntry: 0,
-      entryDate: moment().calendar()
+      entryDate: moment().calendar(),
+      leftArrow: true,
+      rightArrow: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePageLeft = this.handlePageLeft.bind(this);
@@ -23,16 +25,23 @@ export default class JournalEntry extends Component {
   }
 
   handlePageLeft() {
+    if (this.state.currentEntry === this.props.entries.length - 2) {
+      this.setState({leftArrow: false});
+    }
     if (this.state.isNewEntry) {
       this.setState({isNewEntry: false});
       this.setState({journalEntry: this.props.entries[this.state.currentEntry].text});
+      this.setState({rightArrow: true});
     } else if (this.state.currentEntry + 1 < this.props.entries.length) {
+      if (this.state.rightArrow === false) {
+        this.setState({rightArrow: true});
+      }
       console.log('page left', this.props.entries);
       let currentIndex = this.state.currentEntry;
       this.setState({journalEntry: this.props.entries[this.state.currentEntry + 1].text});
       this.setState({currentEntry: this.state.currentEntry + 1});
       this.setState({entryDate: moment(this.props.entries[this.state.currentEntry + 1].datetime).calendar()})
-    };
+    }
     console.log(this.state.currentEntry);
   }
 
@@ -41,7 +50,11 @@ export default class JournalEntry extends Component {
       this.setState({isNewEntry: true});
       this.setState({journalEntry: ''});
       this.setState({entryDate: moment().calendar()});
+      this.setState({rightArrow: false});
     } else if (this.state.currentEntry > 0) {
+      if (this.state.leftArrow === false) {
+        this.setState({leftArrow: true});
+      }
       console.log('page right', this.props.entries);
       this.setState({journalEntry: this.props.entries[this.state.currentEntry - 1].text});
       this.setState({currentEntry: this.state.currentEntry - 1});
@@ -57,11 +70,12 @@ export default class JournalEntry extends Component {
       journalEntry: this.state.journalEntry,
       datetime: new Date(),
     };
-
-    axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
+    if (formData.journalEntry !== '') {
+      axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
       .then((res) => {
         console.log('Received from server: ', res);
       }).catch((err) => console.log('error: ', err));
+    }
   }
 
 
@@ -69,9 +83,19 @@ export default class JournalEntry extends Component {
     return (
       <div className="journalEntry-container shadow">
         <div className="journalEntry-header">
-          <span className="journalEntry-header-left"><i onClick={this.handlePageLeft} className="mdi mdi-arrow-left-bold"></i></span>
+
+          {this.state.leftArrow ? (
+            <span className="journalEntry-header-left">
+              <i onClick={this.handlePageLeft} className="mdi mdi-arrow-left-bold"></i>
+            </span>) : (null)}
+
           <div className="journalEntry-header-center">{this.state.entryDate}</div>
-          <span className="journalEntry-header-right"><i onClick={this.handlePageRight} className="mdi mdi-arrow-right-bold"></i></span>
+
+          {this.state.rightArrow ? (
+          <span className="journalEntry-header-right">
+            <i onClick={this.handlePageRight} className="mdi mdi-arrow-right-bold"></i>
+          </span>) : (null)}
+
         </div>
           <form className="journalEntry-content" onChange={e => this.setState({journalEntry: e.target.value})}  onSubmit={this.handleSubmit} >
             <textarea className="journalEntry-area" placeholder="How was your day?" value={this.state.journalEntry} />
