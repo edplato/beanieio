@@ -60,7 +60,7 @@ class Camera extends Component {
          <span aria-hidden="true">&times;</span>
        </button>  
        </div>
-          <div className="imgPreview">
+           <div className="imgPreview">
             {this.props.imageView}
           </div>
             <div className="flex flex-center">

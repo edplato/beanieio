@@ -7,6 +7,7 @@ import Product from './Product.jsx';
 import { Multiselect, DateTimePicker } from 'react-widgets';
 import './form-styles.css';
 import Modal from 'react-modal';
+//import Modal from 'react-modal-bootstrap';
 import 'react-widgets/dist/css/react-widgets.css';
 momentLocalizer();
 
@@ -93,7 +94,7 @@ export default class Meal extends Component {
     let  customStyles = {
   content : {
     position                   : 'relative',
-    width                      : '400px',
+    width                      : '80%',
     height                     : '600px',
     border                     : '1px solid #ccc',
     background                 : '#9FDCEB',
@@ -112,8 +113,7 @@ export default class Meal extends Component {
     }
     return (
       <div className="form-wrapper shadow" onClick={e => e.stopPropagation()}>
-      <div className="flex flex-center">
-       <Modal
+       <Modal className="modalContainer"
           isOpen={this.state.showDetails}
           onRequestHide={this.handleItemClick}
           style={customStyles}
@@ -125,7 +125,6 @@ export default class Meal extends Component {
          : <div>Loading</div>
           }
         </Modal>
-      </div>
         <div className="form-header flex flex-align-center space-between">
           <span>Select the ingredients you want to track for this meal.</span>
           <button type="button" className="close" aria-label="Close" onClick={() => this.props.handleCancel()}>
@@ -133,14 +132,12 @@ export default class Meal extends Component {
           </button>
         </div>
         <form onSubmit={e => this.handleSubmit(e)}>
-        <div className="form-submit-section flex flex-center">
           <div className="m-upload__file">
               <input id="ul-button-1" type="file" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} name="ul[0][pick]"/>
                  <label htmlFor="ul-button-1">
                   <i className="mdi mdi-camera"></i>
                 </label>
-              </div>
-          </div>           
+              </div>       
        <div className="form-select">
             <Multiselect className="form-multiselect" data={this.props.formConfigData}
               onChange={v => this.setState({ingredientsTags: v})} placeholder="Type or select ingredients here"
@@ -161,10 +158,4 @@ export default class Meal extends Component {
   }
 }
 
- /*  <div className="m-upload__file">
-              <input className="ul-button-1" type="file" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} name="ul[0][pick]"/>
-                 <label key="ul-button-1">
-                  <i className="mdi mdi-image"></i>
-                 <span className="addColor">Pick photo</span>
-                </label>
-              </div>  */
+
