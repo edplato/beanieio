@@ -7,25 +7,29 @@ export default class Journal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      journalEntry: '',
-    }
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-
-  handleSubmit(e) {
-    e && e.preventDefault();
-    let formData = {
-      journalEntry: this.state.journalEntry,
-      datetime: new Date(),
+      entries: []
     };
-
-    axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
-      .then((res) => {
-        console.log('Received from server: ', res);
-      }).catch((err) => console.log('error: ', err));
+    this.filterData = this.filterData.bind(this);
+    this.getEntries = this.getEntries.bind(this);
   }
 
+  getEntries() {
+    axios.get('/api/journal', {
+      params: { limit: 50},
+      headers: {'Authorization': 'bearer ' + this.props.getAuth()}
+    }).then(res => {
+      this.filterData(res.data);
+    });
+  }
+
+  filterData(data) {
+    this.setState({entries: data});
+    console.log(this.state.entries);
+  }
+
+  componentDidMount() {
+    this.getEntries();
+  }
 
   render() {
     return (
