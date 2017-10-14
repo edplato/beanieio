@@ -81,7 +81,12 @@ export default class RatingsLineReport extends Component {
       });
 
       _.forIn(data, (value, key) => {
-        datasets[i].data.push({x: new Date(key), y: value.sum / value.count});
+        let decimal = value.sum / value.count
+        if ( decimal % 1 != 0) {
+            decimal = Math.round( decimal * 10 ) / 10;
+      }
+        datasets[i].data.push({x: new Date(key), y: decimal});
+        
       });
     });
 
