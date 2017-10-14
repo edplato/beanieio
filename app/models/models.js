@@ -68,8 +68,8 @@ const entrySchema = new Schema({
 });
 
 const journalSchema = new Schema({
-  userId: String,
-  datetime: String,
+  userId: Schema.Types.ObjectId,
+  datetime: Date,
   text: String,
   sentimentScore: Number,
   sentimentMagnitude: Number

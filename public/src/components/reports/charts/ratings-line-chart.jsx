@@ -36,7 +36,7 @@ export default class RatingsLineChart extends Component {
             },
             scaleLabel: {
               display: true,
-              labelString: 'Rating',
+              labelString: 'rating',
             },
             ticks: {
               beginAtZero: true,
@@ -67,6 +67,8 @@ export default class RatingsLineChart extends Component {
 
   componentWillReceiveProps (props) {
     if (debug) { console.log('Ratings-Line-Chart will rec: ', props.data); }
+    console.log('Ratings-Line-Chart will rec: ', props.data);
+    console.log('Ratings-Line-Chart journals: ', props.journals);
     this.chart.data.datasets = props.data;
     this.chart.update();
   }
