@@ -48,7 +48,7 @@ export default class RatingsLineReport extends Component {
     });
 
     axios.get('/api/journal', {
-      params: {limit: 5},
+      params: {limit: 50},
       headers: {'Authorization': 'bearer ' + this.props.auth()}
     }).then(res => {
       this.filterData(res.data, true);
