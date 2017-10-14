@@ -39,6 +39,15 @@
   display: inline-block;
   margin-bottom: 20px;
 }
+.form-multiselect2 {
+  margin-top: 10px;
+  width: 200px;
+  display: inline-block;
+  margin-bottom: 10px;
+  border: 4px solid lightgray;
+  border-radius: 15px;
+
+}
 
 .form-submit-section {
   margin: 20px 0 10px 0;
@@ -61,10 +70,10 @@
   display: inline-block;
   color: var(--b5);
 }
-.mdi {
+div.mdi {
   text-align: center;
   display: block;
-  font-size: 34px;
+  font-size: 16px;
 }
 
 .imgPreview {
@@ -99,33 +108,117 @@ img{
   text-align: center;
 }
 .notselected{
-  text-align: center;
-  padding: 10px;
-  margin-left: 10px;
+  display: flex;
+   padding: 5px;
+  margin-left: 5px;
+  margin-bottom: 4px;
+  background: white;
+  border: 4px solid lightgray;
+  border-radius: 15px;
+/*  text-align: center;
+  padding: 5px;
+  margin-left: 5px;
+  margin-bottom: 4px;
   background: white;
   border: 4px solid lightgray;
   border-radius: 15px;
   font-weight: 700;
   font-size: 10pt;
-  cursor: pointer;
+  cursor: pointer;*/
 }
 .selected {
+  flex: 1;
   text-align: center;
-   padding: 10px;
-  margin-left: 10px;
+   font-weight: 700;
+  font-size: 10pt;
+ /* text-align: center;
+   padding: 5px;
+  margin-left: 5px;
+  margin-bottom: 4px;
   background: #efefef;
   border: 4px solid lightgray;
   border-radius: 15px;
   font-weight: 700;
   font-size: 10pt;
-  cursor: pointer;
+  cursor: pointer;*/
 }
 
 .products {
-  text-align: center;
-  margin-left: 20px;
   width:250px;
-  height: 100px;
+  text-align: center;
+  height: 200px;
+  background: #9FDCEB;
+}
+.header {
+  color: white;
+}
+.container {
+  display: flex;
+   padding: 5px;
+  margin-left: 5px;
+  margin-bottom: 4px;
+  background: #efefef;
+  border: 4px solid lightgray;
+  border-radius: 15px;
+}
+.word {
+    flex: 1;
+  text-align: center;
+   font-weight: 700;
+  font-size: 10pt;
 }
 
+.loader {
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+}
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.m-upload {
+  float: left;
+  border: 1px solid #90A4AE;
+  text-align: center;
+  width: 100%;
+  margin: 0 16px 16px 0;
+}
+ 
+.m-upload__file label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: 14px;
+  padding: 16px;
+  cursor: pointer;
+}
+.m-upload__file [type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  outline: none;
+  overflow: hidden;
+}
+.m-upload__file i {
+  font-size: 36px;
+  color: #9FDCEB;
+  line-height: 1;
+}
+.m-upload__file:focus i, .m-upload__file:hover i {
+  color: #FF6B57;
+}
+ 
+ 
+ 

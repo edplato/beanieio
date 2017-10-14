@@ -7,7 +7,6 @@ import Product from './Product.jsx';
 import { Multiselect, DateTimePicker } from 'react-widgets';
 import './form-styles.css';
 import Modal from 'react-modal';
-//import { Modal, ModalBody} from 'react-modal-bootstrap';
 import 'react-widgets/dist/css/react-widgets.css';
 momentLocalizer();
 
@@ -46,7 +45,7 @@ export default class Meal extends Component {
   handleSubmitImg(e) {
     e && e.preventDefault();
     console.log('This .state file --> ',this.state.file);
-    this.postingPics(this.state.file);
+    // this.postingPics(this.state.file);
   }
 
     handleImageUpload(e) {
@@ -62,28 +61,18 @@ export default class Meal extends Component {
       });
     }
     reader.readAsDataURL(file)
-    this.postingPics(file);
-  }
-
-  postingPics(file) {
-    var fd = new FormData();
-    fd.append('image',file);
-    axios.post('/api/clarifai',fd)
-      .then((res) => {
-        console.log('Success --> ',res.data[0].data.concepts);
-        this.state.data = res.data[0].data.concepts.slice(0,10);
-        this.handleItemClick();
-      })
-      .catch((err) =>  {
-        console.log('Error --> ',err);
-     })
+    this.handleItemClick();
   }
 
 
   handleItemClick() {
+    if (this.state.showDetails) {
+      this.state.file = '';
+      this.state.imagePreviewUrl = '';
+    }
     this.setState({
       showDetails: !this.state.showDetails
-    });
+      });
   }
 
   getProducts(obj) {
@@ -100,13 +89,12 @@ export default class Meal extends Component {
   render() {
     let {imagePreviewUrl} = this.state;
     let $imagePreview = null;
+    let $file = '';
     let  customStyles = {
   content : {
-    position                  : 'absolute',
-    top                        : '40px',
-    left                       : '300px',
-    right                      : '450px',
-    bottom                     : '100px',
+    position                   : 'relative',
+    width                      : '400px',
+    height                     : '600px',
     border                     : '1px solid #ccc',
     background                 : '#9FDCEB',
     overflow                   : 'auto',
@@ -117,33 +105,43 @@ export default class Meal extends Component {
   }
 };
     if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} />);
-      console.log('Image --> ',$imagePreview)
+       $imagePreview = (<img src={imagePreviewUrl} />);
+       $file = this.state.file;
     } else {
       $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
     }
     return (
       <div className="form-wrapper shadow" onClick={e => e.stopPropagation()}>
+      <div className="flex flex-center">
        <Modal
           isOpen={this.state.showDetails}
           onRequestHide={this.handleItemClick}
+          style={customStyles}
           onClose={this.handleItemClick}
         >
-          <Camera imageView={$imagePreview} products={this.state.data} onClose={this.getProducts}/> 
+          {
+            ($file !== '')
+         ? <Camera imageView={$imagePreview} onClose={this.getProducts} file={$file}/> 
+         : <div>Loading</div>
+          }
         </Modal>
+      </div>
         <div className="form-header flex flex-align-center space-between">
           <span>Select the ingredients you want to track for this meal.</span>
           <button type="button" className="close" aria-label="Close" onClick={() => this.props.handleCancel()}>
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-          <form onSubmit={(e)=>this.handleSubmitImg(e)}>
-              <input className="fileInput" type="file" name="image" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} />
-            </form>
-
         <form onSubmit={e => this.handleSubmit(e)}>
+        <div className="form-submit-section flex flex-center">
+          <div className="m-upload__file">
+              <input id="ul-button-1" type="file" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} name="ul[0][pick]"/>
+                 <label htmlFor="ul-button-1">
+                  <i className="mdi mdi-camera"></i>
+                </label>
+              </div>
+          </div>           
        <div className="form-select">
-           <div className="mdi mdi-camera"/>
             <Multiselect className="form-multiselect" data={this.props.formConfigData}
               onChange={v => this.setState({ingredientsTags: v})} placeholder="Type or select ingredients here"
               value={this.state.ingredientsTags}
@@ -162,3 +160,11 @@ export default class Meal extends Component {
     );
   }
 }
+
+ /*  <div className="m-upload__file">
+              <input className="ul-button-1" type="file" accept="image/*" capture="user" onChange={(e)=>this.handleImageUpload(e)} name="ul[0][pick]"/>
+                 <label key="ul-button-1">
+                  <i className="mdi mdi-image"></i>
+                 <span className="addColor">Pick photo</span>
+                </label>
+              </div>  */
