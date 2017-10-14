@@ -50,6 +50,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  position: relative;
 }
 
 @media(max-width: 575px) {
@@ -68,6 +69,23 @@
   background: var(--b5);
   color: white;
   margin-bottom: 5px;
+
+}
+
+
+.journalEntry-header-left {
+
+
+  left: 0;
+}
+
+.journalEntry-header-center {
+  justify-content: center;
+}
+
+.journalEntry-header-right {
+  position: absolute;
+  right: 0;
 }
 
 .journalEntry-content {
