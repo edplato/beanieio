@@ -27,16 +27,14 @@ export default class Journal extends Component {
     console.log(this.state.entries);
   }
 
-  componentDidMount() {
-    this.getEntries();
-  }
+
 
   render() {
     return (
       <div className="journal-container">
         <div className="journal-header"><span>Journal</span></div>
           <div className="journal-window">
-            <JournalEntry getAuth={this.props.getAuth} />
+            <JournalEntry entries={this.state.entries} getEntries={this.getEntries} getAuth={this.props.getAuth} />
           </div>
       </div>
     )
