@@ -9,7 +9,7 @@ import Journal from '../public/src/components/journal/journal.jsx';
 
 // import App from '../public/src/components/app.jsx';
 import '../public/styles/styles.css';
-// import '../public/src/components/app.css';
+import '../public/src/components/app.css';
 // import '../public/styles/entry-styles.css';
 
 // activity feed entries

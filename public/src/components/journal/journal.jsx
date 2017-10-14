@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import JournalEntry from './journalEntry.jsx';
 import './journal.css';
 
 export default class Journal extends Component {
@@ -15,7 +16,8 @@ export default class Journal extends Component {
   handleSubmit(e) {
     e && e.preventDefault();
     let formData = {
-      journalEntry: this.state.journalEntry
+      journalEntry: this.state.journalEntry,
+      datetime: new Date(),
     };
 
     axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
@@ -29,13 +31,9 @@ export default class Journal extends Component {
     return (
       <div className="journal-container">
         <div className="journal-header"><span>Journal</span></div>
-          <div className="journal-content">
-            <form onChange={e => this.setState({journalEntry: e.target.value})}  onSubmit={this.handleSubmit} >
-              <textarea placeholder="Enter a journal entry" />
-              <input type="submit" />
-            </form>
+          <div className="journal-window">
+            <JournalEntry getAuth={this.props.getAuth} />
           </div>
-
       </div>
     )
   }

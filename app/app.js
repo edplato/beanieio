@@ -14,8 +14,7 @@ const upload = multer({ dest: './uploads/' });
 
 // clarifai
 const Clarifai = require('clarifai');
-const configKey = tryRequire('../config/config');
-
+const configKey = tryRequire('../../config/config.js');
 
 // Google Cloud
 const config = process.env.GCLOUD || {
