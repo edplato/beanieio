@@ -21,12 +21,17 @@ class Product extends Component {
       <div> 
         {
           (this.state.selected)
-       ? <div className="selected" onClick={this.handleClick}>
+       ? <div className="container">
+           <div className="selected" onClick={this.handleClick}>
             {this.props.product.name}
             </div>  
-        : <div className="notselected" onClick={this.handleClick}>
-              {this.props.product.name}
-           </div>
+             <div className="mdi mdi-checkbox-marked-circle-outline" />
+          </div>
+        : <div className="notselected">
+            <div className="word" onClick={this.handleClick}>
+                {this.props.product.name}
+             </div>
+          </div>
     }
     </div>
     )
