@@ -34,6 +34,7 @@
       -ms-flex-flow: row warp;
           flex-flow: row warp;
   padding: 0 10px;
+  flex-grow: 1;
 }
 
 .journalEntry-container {
@@ -51,6 +52,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   position: relative;
+  flex-grow: 1;
 }
 
 @media(max-width: 575px) {
@@ -62,20 +64,17 @@
 
 .journalEntry-header {
   font-size: 1.2em;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  flex: 0 0 auto;
+  display: flex;
   padding: 5px 10px;
   background: var(--b5);
   color: white;
   margin-bottom: 5px;
-
+  justify-content: center;
 }
 
 
 .journalEntry-header-left {
-
-
+  position: absolute;
   left: 0;
 }
 
@@ -101,7 +100,7 @@
           flex-direction: column;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
-          justify-content: flex-start;
+  flex-grow: 1;
 }
 
 .journalEntry-area {
@@ -117,8 +116,8 @@
   display: flex;
   font-size: 22px;
   line-height: 50px;
-  height: 350px;
-  max-height: 500px;
+  flex-grow: 1;
+
   padding: 11px 20px 0 70px;
   height: available;
   resize: none;
