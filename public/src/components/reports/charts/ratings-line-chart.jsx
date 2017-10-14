@@ -31,6 +31,9 @@ export default class RatingsLineChart extends Component {
         },
         scales: {
           yAxes: [{
+            id: 'rating-y-axis',
+            type: 'linear',
+            position: 'left',
             gridLines: {
               display: false,
             },
@@ -41,6 +44,23 @@ export default class RatingsLineChart extends Component {
             ticks: {
               beginAtZero: true,
               max: 5,
+            },
+          },
+          {
+            id: 'sentiment-y-axis',
+            type: 'linear',
+            position: 'right',
+            gridLines: {
+              display: false,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'sentiment',
+            },
+            ticks: {
+              beginAtZero: false,
+              min: -1,
+              max: 1,
             },
           }],
           xAxes: [{
@@ -67,9 +87,14 @@ export default class RatingsLineChart extends Component {
 
   componentWillReceiveProps (props) {
     if (debug) { console.log('Ratings-Line-Chart will rec: ', props.data); }
-    console.log('Ratings-Line-Chart will rec: ', props.data);
-    console.log('Ratings-Line-Chart journals: ', props.journals);
-    this.chart.data.datasets = props.data;
+
+    var comboData = props.data;
+
+    props.journals.forEach((journal) => {
+      comboData[2] = journal
+    })
+
+    this.chart.data.datasets = comboData;
     this.chart.update();
   }
 

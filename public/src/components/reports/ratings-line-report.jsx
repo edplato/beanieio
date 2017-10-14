@@ -11,14 +11,15 @@ const colors = [
   '#f6ae2d',
   '#60afff',
   '#5B5F97',
-  '#f26419'
+  '#f26419',
 ];
 
 const fieldMap = {
-  physicalScore: {legend: 'Physical Score', axis: 'Rating'},
-  emotionalScore: {legend: 'Emotional Score', axis: 'Rating'},
-  sleepQuality: {legend: 'Sleep Quality', axis: 'Rating'},
-  exerciseIntensity: {legend: 'Exercise Intensity', axis: 'Rating'},
+  physicalScore: {legend: 'Physical Score', axis: 'Rating', yAxisID: 'rating-y-axis'},
+  emotionalScore: {legend: 'Emotional Score', axis: 'Rating', yAxisID: 'rating-y-axis'},
+  sleepQuality: {legend: 'Sleep Quality', axis: 'Rating', yAxisID: 'rating-y-axis'},
+  exerciseIntensity: {legend: 'Exercise Intensity', axis: 'Rating', yAxisID: 'rating-y-axis'},
+  sentimentScore: {legend: 'Sentiment Analysis', axis: 'Sentiment', yAxisID: 'sentiment-y-axis'},
 };
 
 export default class RatingsLineReport extends Component {
@@ -47,11 +48,10 @@ export default class RatingsLineReport extends Component {
     });
 
     axios.get('/api/journal', {
-      params: {limit: 5},
+      params: {limit: 50},
       headers: {'Authorization': 'bearer ' + this.props.auth()}
     }).then(res => {
-      console.log('JOURNALS', res);
-      this.setState({journals: res.data});
+      this.filterData(res.data, true);
     });
   }
 
@@ -62,37 +62,64 @@ export default class RatingsLineReport extends Component {
     }
   }
 
-  filterData(entries) {
+  filterData(entries, journals) {
     if (debug) { console.log(entries); }
     var datasets = [ ];
-    _.each(this.fields, (field, i) => {
-      datasets.push({label: fieldMap[field].legend, data: [ ], fill: false, borderColor: colors[i]});
-      var data = { };
-      _.each(entries, (entry, j) => {
-        let day = moment(entries[j].datetime).startOf('day');
-        if (day in data) {
-          data[day].sum += entries[j][field];
-          data[day].count++;
-        } else {
-          data[day] = { };
-          data[day].sum = entries[j][field];
-          data[day].count = 1;
-        }
-      });
 
-      _.forIn(data, (value, key) => {
-        let decimal = value.sum / value.count
-        if ( decimal % 1 != 0) {
+    if(journals){
+      var journalData = [];
+
+        var data = { };
+        _.each(entries, (entry, j) => {
+          let day = moment(entries[j].datetime).startOf('day');
+          if (day in data) {
+            data[day].sum += entries[j]['sentimentScore'];
+            data[day].count++;
+          } else {
+            data[day] = { };
+            data[day].sum = entries[j]['sentimentScore'];
+            data[day].count = 1;
+          }
+        });
+
+        _.forIn(data, (value, key) => {
+          journalData.push({x: new Date(key), y: ((value.sum / value.count).toFixed(2)/1)});
+        });
+
+      datasets.push({label: "Journal Sentiment", yAxisID: "sentiment-y-axis", pointBorderWidth: 3, borderDash: [2], borderDashOffset: 2, data: journalData, fill: false, borderColor: '#067E9A'});
+
+      this.setState({journals: datasets});
+
+    } else {
+
+      _.each(this.fields, (field, i) => {
+        datasets.push({label: fieldMap[field].legend, yAxisID: "rating-y-axis", data: [ ], fill: false, borderColor: colors[i]});
+
+        var data = { };
+        _.each(entries, (entry, j) => {
+          let day = moment(entries[j].datetime).startOf('day');
+          if (day in data) {
+            data[day].sum += entries[j][field];
+            data[day].count++;
+          } else {
+            data[day] = { };
+            data[day].sum = entries[j][field];
+            data[day].count = 1;
+          }
+        });
+
+        _.forIn(data, (value, key) => {
+          let decimal = value.sum / value.count
+          if ( decimal % 1 != 0) {
             decimal = Math.round( decimal * 10 ) / 10;
-      }
-        datasets[i].data.push({x: new Date(key), y: decimal});
-        
+          }
+          datasets[i].data.push({x: new Date(key), y: decimal});
+        });
       });
-    });
-
 
     if (debug) { console.log('Data created in report: ', datasets); }
     this.setState({data: datasets});
+    }
   }
 
   render() {

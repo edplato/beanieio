@@ -13,7 +13,7 @@ export default class BarChart extends Component {
     this.labelY;
 
     if (this.props.id === "3-Water") {
-      this.labelY = 'oz';
+      this.labelY = 'fl oz';
     } else if (this.props.id === "3-Sleep") {
       this.labelY = 'hours';
     } else if (this.props.id === "3-Exercise") {
@@ -73,7 +73,6 @@ export default class BarChart extends Component {
 
   componentWillReceiveProps (props) {
     if (debug) { console.log('Bar chart will rec: ', props.data); }
-    console.log(props);
     this.chart.data = props.data;
     this.chart.update();
   }
