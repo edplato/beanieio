@@ -25,41 +25,52 @@ export default class JournalEntry extends Component {
   }
 
   handlePageLeft() {
-    if (this.state.currentEntry === this.props.entries.length - 2) {
-      this.setState({leftArrow: false});
-    }
     if (this.state.isNewEntry) {
-      this.setState({isNewEntry: false});
-      this.setState({journalEntry: this.props.entries[this.state.currentEntry].text});
-      this.setState({rightArrow: true});
+      this.setState({
+        isNewEntry: false,
+        journalEntry: this.props.entries[this.state.currentEntry].text,
+        rightArrow: true
+      });
+
     } else if (this.state.currentEntry + 1 < this.props.entries.length) {
+
       if (this.state.rightArrow === false) {
         this.setState({rightArrow: true});
       }
-      console.log('page left', this.props.entries);
+      if (this.state.currentEntry + 2 === this.props.entries.length) {
+        this.setState({leftArrow: false});
+      }
+
       let currentIndex = this.state.currentEntry;
-      this.setState({journalEntry: this.props.entries[this.state.currentEntry + 1].text});
-      this.setState({currentEntry: this.state.currentEntry + 1});
-      this.setState({entryDate: moment(this.props.entries[this.state.currentEntry + 1].datetime).calendar()})
+      this.setState({
+        journalEntry: this.props.entries[this.state.currentEntry + 1].text,
+        currentEntry: this.state.currentEntry + 1,
+        entryDate: moment(this.props.entries[this.state.currentEntry + 1].datetime).calendar()
+      });
+
     }
     console.log(this.state.currentEntry);
   }
 
   handlePageRight() {
     if (this.state.currentEntry === 0) {
-      this.setState({isNewEntry: true});
-      this.setState({journalEntry: ''});
-      this.setState({entryDate: moment().calendar()});
-      this.setState({rightArrow: false});
+      this.setState({
+        isNewEntry: true,
+        journalEntry: '',
+        entryDate: moment().calendar(),
+        rightArrow: false
+      });
+
     } else if (this.state.currentEntry > 0) {
       if (this.state.leftArrow === false) {
         this.setState({leftArrow: true});
       }
       console.log('page right', this.props.entries);
-      this.setState({journalEntry: this.props.entries[this.state.currentEntry - 1].text});
-      this.setState({currentEntry: this.state.currentEntry - 1});
-      this.setState({entryDate: moment(this.props.entries[this.state.currentEntry - 1].datetime).calendar()})
-      console.log(this.state.currentEntry);
+      this.setState({
+        journalEntry: this.props.entries[this.state.currentEntry - 1].text,
+        currentEntry: this.state.currentEntry - 1,
+        entryDate: moment(this.props.entries[this.state.currentEntry - 1].datetime).calendar()
+      });
     };
   }
 
