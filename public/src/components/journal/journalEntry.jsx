@@ -179,7 +179,7 @@ export default class JournalEntry extends Component {
             <div className="journal-submit-section flex flex-center">
               {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
             </div>
-            <button onClick={this.startSpeech}>{this.state.audioButton}</button>
+            <button className="btn journal-audio-btn shadow" onClick={this.startSpeech}>{this.state.audioButton}</button>
           </form>
       </div>
     )
