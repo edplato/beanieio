@@ -14,6 +14,7 @@ export default class JournalEntry extends Component {
       entryDate: moment().calendar(),
       leftArrow: true,
       rightArrow: false,
+      audioButton: 'Click me to dictate speech'
     }
     // Arrow Functionality
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,6 +35,7 @@ export default class JournalEntry extends Component {
     recognition.onstart = () => {
       this.recognizing = true;
       console.log('Speak now');
+      this.setState({audioButton: 'Listening...'});
     }
 
     let capitalize = (string) => {
@@ -50,6 +52,7 @@ export default class JournalEntry extends Component {
     }
 
     recognition.onresult = (event) => {
+      let interim_transcript = '';
       for (var i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           let final_transcript = '';
@@ -58,6 +61,8 @@ export default class JournalEntry extends Component {
           this.setState({journalEntry: this.state.journalEntry + final_transcript});
         } else {
           interim_transcript += event.results[i][0].transcript;
+          console.log(interim_transcript);
+          this.setState({audioButton: interim_transcript});
         }
       }
     }
@@ -65,6 +70,7 @@ export default class JournalEntry extends Component {
     recognition.onspeechend = () => {
       console.log('Speech end');
       recognition.stop();
+      this.setState({audioButton: 'Click me to dictate speech'});
     }
 
     recognition.onnomatch = (event) => {
@@ -76,10 +82,7 @@ export default class JournalEntry extends Component {
     }
 
     this.startSpeech = () => {
-      console.log('button worked');
-      console.log('webSpeech', this);
       recognition.start();
-
     }
 
   }
@@ -176,7 +179,7 @@ export default class JournalEntry extends Component {
             <div className="journal-submit-section flex flex-center">
               {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
             </div>
-            <button onClick={this.startSpeech}>Audio</button>
+            <button onClick={this.startSpeech}>{this.state.audioButton}</button>
           </form>
       </div>
     )
