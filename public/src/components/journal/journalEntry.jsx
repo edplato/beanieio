@@ -36,16 +36,30 @@ export default class JournalEntry extends Component {
       console.log('Speak now');
     }
 
+    let capitalize = (string) => {
+      let firstLetter = string[0].toUpperCase();
+      return firstLetter + string.slice(1);
+    }
+
+    let punctuate = (string) => {
+      let arr = string.split(" ");
+      if (arr[0] === 'Who' || arr[0] === 'What' || arr[0] === 'When' || arr[0] === 'Where' || arr[0] === 'Why' || arr[0] === 'Would') {
+        return string + '? ';
+      }
+      return string + '. ';
+    }
+
     recognition.onresult = (event) => {
-      let interim_transcript = '';
       for (var i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
+          let final_transcript = '';
           final_transcript += event.results[i][0].transcript;
+          final_transcript = punctuate(capitalize(final_transcript));
+          this.setState({journalEntry: this.state.journalEntry + final_transcript});
         } else {
           interim_transcript += event.results[i][0].transcript;
         }
       }
-      this.setState({journalEntry: final_transcript});
     }
 
     recognition.onspeechend = () => {
