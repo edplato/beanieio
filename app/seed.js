@@ -1,5 +1,6 @@
 // seed.js is for seeding the database with mock data to work with in the interface
 
+
 // import mongoose and User, Entry, Journal schema
 const { User, Entry, Journal } = require('./models/models.js');
 const ObjectId = require('mongoose').Types.ObjectId;

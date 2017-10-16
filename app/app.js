@@ -88,7 +88,6 @@ app.get('/api/users/formconfig', jwtAuth(), (req, res) => {
 app.get('/api/journal', jwtAuth(), (req, res) => {
   if (debug) { console.log('Get request journal for: ', req.user); }
   let q = {userId: ObjectId(req.user._id)};
-  console.log('UserID: ', q);
   if (req.query.type) { q.type = req.query.type; }
   Journal.find(q).limit(req.query.limit ? req.query.limit * 1 : 5).sort({datetime: -1})
     .exec().then(journals => {
