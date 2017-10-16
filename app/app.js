@@ -55,6 +55,10 @@ app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+
+const seedJournalDB = require('./seed');
+seedJournalDB();
+
 //====== API ROUTES START HERE =====\\
 // prefix all API routes with /api/ in order to explicitly identify them
 // all API routes to get data should be protected with jwtAuth()
