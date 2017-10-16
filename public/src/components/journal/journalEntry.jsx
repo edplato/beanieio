@@ -14,10 +14,77 @@ export default class JournalEntry extends Component {
       entryDate: moment().calendar(),
       leftArrow: true,
       rightArrow: false,
+      audioButton: 'Click me to dictate speech'
     }
+    // Arrow Functionality
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePageLeft = this.handlePageLeft.bind(this);
     this.handlePageRight = this.handlePageRight.bind(this);
+
+    // Speech to Text initialization functions
+    let SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+    let SpeechGrammarList = webkitSpeechGrammarList || SpeechGrammarList;
+    let SpeechRecognitionEvent = webkitSpeechRecognitionEvent || SpeechRecognitionEvent;
+    let recognizing = false;
+    let final_transcript = '';
+
+    let recognition = new SpeechRecognition();
+    recognition.continous = true;
+    recognition.interim = true;
+
+    recognition.onstart = () => {
+      this.recognizing = true;
+      console.log('Speak now');
+      this.setState({audioButton: 'Listening...'});
+    }
+
+    let capitalize = (string) => {
+      let firstLetter = string[0].toUpperCase();
+      return firstLetter + string.slice(1);
+    }
+
+    let punctuate = (string) => {
+      let arr = string.split(" ");
+      if (arr[0] === 'Who' || arr[0] === 'What' || arr[0] === 'When' || arr[0] === 'Where' || arr[0] === 'Why' || arr[0] === 'Would') {
+        return string + '? ';
+      }
+      return string + '. ';
+    }
+
+    recognition.onresult = (event) => {
+      let interim_transcript = '';
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          let final_transcript = '';
+          final_transcript += event.results[i][0].transcript;
+          final_transcript = punctuate(capitalize(final_transcript));
+          this.setState({journalEntry: this.state.journalEntry + final_transcript});
+        } else {
+          interim_transcript += event.results[i][0].transcript;
+          console.log(interim_transcript);
+          this.setState({audioButton: interim_transcript});
+        }
+      }
+    }
+
+    recognition.onspeechend = () => {
+      console.log('Speech end');
+      recognition.stop();
+      this.setState({audioButton: 'Click me to dictate speech'});
+    }
+
+    recognition.onnomatch = (event) => {
+      diagnostic.textContent = 'I did not recognize that.';
+    }
+
+    recognition.onerror = (event) => {
+      diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+    }
+
+    this.startSpeech = () => {
+      recognition.start();
+    }
+
   }
 
   componentDidMount() {
@@ -49,7 +116,6 @@ export default class JournalEntry extends Component {
       });
 
     }
-    console.log(this.state.currentEntry);
   }
 
   handlePageRight() {
@@ -65,7 +131,6 @@ export default class JournalEntry extends Component {
       if (this.state.leftArrow === false) {
         this.setState({leftArrow: true});
       }
-      console.log('page right', this.props.entries);
       this.setState({
         journalEntry: this.props.entries[this.state.currentEntry - 1].text,
         currentEntry: this.state.currentEntry - 1,
@@ -88,6 +153,7 @@ export default class JournalEntry extends Component {
       }).catch((err) => console.log('error: ', err));
     }
   }
+
 
 
   render() {
@@ -113,6 +179,7 @@ export default class JournalEntry extends Component {
             <div className="journal-submit-section flex flex-center">
               {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
             </div>
+            <button onClick={this.startSpeech}>{this.state.audioButton}</button>
           </form>
       </div>
     )
