@@ -17,6 +17,7 @@ const Clarifai = require('clarifai');
 const configKey = tryRequire('../../config/config.js');
 
 // Google Cloud
+console.log('GCLOUD-->', process.env.GCLOUD);
 const config = process.env.GCLOUD || {
   projectId: 'testproject-173217',
   keyFilename: './config/testproject-0ec8021d1e1c.json'
