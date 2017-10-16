@@ -18,11 +18,11 @@ const configKey = tryRequire('../../config/config.js');
 
 // Google Cloud
 console.log('GCLOUD-->', process.env.GCLOUD);
-const config = JSON.parse(process.env.GCLOUD) || {
+const config = {
   projectId: 'testproject-173217',
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
-const Language = require('@google-cloud/language')(config);
+const Language = require('@google-cloud/language')(process.env.GCLOUD || config);
 const language = Language;
 
 // db setup
