@@ -20,7 +20,7 @@ export default class RatingsLineChart extends Component {
     this.chart = new Chart(this.props.id, {
       type: 'line',
       data: {
-        datasets: this.props.data,
+        datasets: [],
       },
       options: {
         maintainAspectRatio: false,

@@ -24,7 +24,7 @@ export default class BarChart extends Component {
 
     this.chart = new Chart(this.props.id, {
       type: 'bar',
-      data: this.props.data,
+      data: [],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -73,7 +73,7 @@ export default class BarChart extends Component {
 
   componentWillReceiveProps (props) {
     if (debug) { console.log('Bar chart will rec: ', props.data); }
-    this.chart.data = props.data;
+    this.chart.data.datasets = props.data;
     this.chart.update();
   }
 

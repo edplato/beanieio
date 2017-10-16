@@ -53,23 +53,23 @@ class Camera extends Component {
 
   render() {
     return (
-      <div > 
+      <div >
       <div className="form-header flex flex-align-center space-between">
           <h2 className="header"> Ingredients from your food </h2>
       <button type="button" className="close" aria-label="Close" onClick={this.onClose}>
          <span aria-hidden="true">&times;</span>
-       </button>  
+       </button>
        </div>
            <div className="imgPreview">
             {this.props.imageView}
           </div>
             <div className="flex flex-center">
             {
-              (this.state.ingredients.length === 0) 
+              (this.state.ingredients.length === 0)
             ? <div className="loader" />
             :  <div className="products">
                 {this.state.ingredients.map(item =>
-                <Product product={item} addItems={this.collectProducts}/>
+                <Product product={item} key={item.name} addItems={this.collectProducts}/>
               )}
           </div>
             }
@@ -80,8 +80,8 @@ class Camera extends Component {
 }
 
 export default Camera;
-          // <Multiselect className="form-multiselect2" 
-         
+          // <Multiselect className="form-multiselect2"
+
             //  data={this.state.formData}
              // onChange={v => this.setState({ingredients: v})} placeholder="Type or select ingredients here"
              // value={this.state.ingredients}
