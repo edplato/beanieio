@@ -15,9 +15,59 @@ export default class JournalEntry extends Component {
       leftArrow: true,
       rightArrow: false,
     }
+    // Arrow Functionality
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePageLeft = this.handlePageLeft.bind(this);
     this.handlePageRight = this.handlePageRight.bind(this);
+
+    // Speech to Text initialization functions
+    let SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+    let SpeechGrammarList = webkitSpeechGrammarList || SpeechGrammarList;
+    let SpeechRecognitionEvent = webkitSpeechRecognitionEvent || SpeechRecognitionEvent;
+    let recognizing = false;
+    let final_transcript = '';
+
+    let recognition = new SpeechRecognition();
+    recognition.continous = true;
+    recognition.interim = true;
+
+    recognition.onstart = () => {
+      this.recognizing = true;
+      console.log('Speak now');
+    }
+
+    recognition.onresult = (event) => {
+      let interim_transcript = '';
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final_transcript += event.results[i][0].transcript;
+        } else {
+          interim_transcript += event.results[i][0].transcript;
+        }
+      }
+      this.setState({journalEntry: final_transcript});
+    }
+
+    recognition.onspeechend = () => {
+      console.log('Speech end');
+      recognition.stop();
+    }
+
+    recognition.onnomatch = (event) => {
+      diagnostic.textContent = 'I did not recognize that.';
+    }
+
+    recognition.onerror = (event) => {
+      diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+    }
+
+    this.startSpeech = () => {
+      console.log('button worked');
+      console.log('webSpeech', this);
+      recognition.start();
+
+    }
+
   }
 
   componentDidMount() {
@@ -49,7 +99,6 @@ export default class JournalEntry extends Component {
       });
 
     }
-    console.log(this.state.currentEntry);
   }
 
   handlePageRight() {
@@ -65,7 +114,6 @@ export default class JournalEntry extends Component {
       if (this.state.leftArrow === false) {
         this.setState({leftArrow: true});
       }
-      console.log('page right', this.props.entries);
       this.setState({
         journalEntry: this.props.entries[this.state.currentEntry - 1].text,
         currentEntry: this.state.currentEntry - 1,
@@ -88,6 +136,7 @@ export default class JournalEntry extends Component {
       }).catch((err) => console.log('error: ', err));
     }
   }
+
 
 
   render() {
@@ -113,6 +162,7 @@ export default class JournalEntry extends Component {
             <div className="journal-submit-section flex flex-center">
               {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
             </div>
+            <button onClick={this.startSpeech}>Audio</button>
           </form>
       </div>
     )
