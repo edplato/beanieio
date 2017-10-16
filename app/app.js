@@ -201,7 +201,9 @@ app.post('/api/clarifai', upload.fields([{ name: 'image' }]), (req, res, next) =
 // Clearly Negative* "score": -0.6, "magnitude": 4.0
 // Neutral "score": 0.1, "magnitude": 0.0
 // Mixed "score": 0.0, "magnitude": 4.0
-app.post('/api/language', jwtAuth(), sanitizeBody('journalEntry').escape().trim(), (req, res) => {
+
+// sanitizeBody('journalEntry').escape().trim() middleware for sanitization (currently not in use);
+app.post('/api/language', jwtAuth(), (req, res) => {
 
   console.log(req.body);
   let textAnalysis = req.body.journalEntry;

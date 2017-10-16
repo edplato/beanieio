@@ -152,3 +152,17 @@
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
 }
+
+
+.journal-audio-btn:hover {
+  background: -webkit-gradient(linear, left top, left bottom, from(var(--b4)), to(var(--b5)));
+  background: -webkit-linear-gradient(var(--b4), var(--b5));
+  background: -o-linear-gradient(var(--b4), var(--b5));
+  background: linear-gradient(var(--b4), var(--b5));
+  color: white;
+}
+
+.journal-audio-btn:focus:active {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}

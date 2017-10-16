@@ -146,10 +146,15 @@ export default class JournalEntry extends Component {
       journalEntry: this.state.journalEntry,
       datetime: new Date(),
     };
+    this.setState({
+      journalEntry: '',
+    });
+
     if (formData.journalEntry !== '') {
       axios.post('/api/language', formData, {headers: {'Authorization': 'bearer ' + this.props.getAuth()}})
       .then((res) => {
         console.log('Received from server: ', res);
+        this.props.getEntries();
       }).catch((err) => console.log('error: ', err));
     }
   }
@@ -179,7 +184,7 @@ export default class JournalEntry extends Component {
             <div className="journal-submit-section flex flex-center">
               {this.state.isNewEntry ? (<button type="submit" className="btn journal-submit-btn shadow">Submit</button>) : (null) }
             </div>
-            <button onClick={this.startSpeech}>{this.state.audioButton}</button>
+            <button className="btn journal-audio-btn shadow" onClick={this.startSpeech}>{this.state.audioButton}</button>
           </form>
       </div>
     )
