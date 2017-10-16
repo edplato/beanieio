@@ -6,10 +6,6 @@
   cursor: default;
 }
 
-.form-wrapper form {
-  padding: 20px 40px 0 40px;
-}
-
 .form-header {
   font-size: 1.4em;
   color: var(--b5);
@@ -192,7 +188,7 @@ img{
 }
 
 
- 
+
 .m-upload__file label {
   text-align: center;
   display: -webkit-box;
@@ -231,6 +227,5 @@ img{
   max-width: 400px;
   max-height: 550px;
 }
- 
- 
- 
+
+
