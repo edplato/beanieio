@@ -17,11 +17,26 @@ const Clarifai = require('clarifai');
 const configKey = tryRequire('../../config/config.js');
 
 // Google Cloud
-const config = process.env.GCLOUD || {
+console.log('GCLOUD-->', JSON.parse(process.env.GCLOUD), typeof process.env.GCLOUD);
+
+const config = {
   projectId: 'testproject-173217',
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
-const Language = require('@google-cloud/language')(config);
+
+let gCloudConfig;
+
+if (process.env.GCLOUD) {
+  console.log('INSIDE IF');
+  let gCloud = JSON.parse(process.env.GCLOUD);
+
+  gCloudConfig = {
+    projectId: gCloud.project_id,
+    credentials: gCloud
+  };
+}
+
+const Language = require('@google-cloud/language')(gCloudConfig || config);
 const language = Language;
 
 // db setup
@@ -88,6 +103,7 @@ app.get('/api/users/formconfig', jwtAuth(), (req, res) => {
 app.get('/api/journal', jwtAuth(), (req, res) => {
   if (debug) { console.log('Get request journal for: ', req.user); }
   let q = {userId: ObjectId(req.user._id)};
+  console.log('user._id: ', q);
   if (req.query.type) { q.type = req.query.type; }
   Journal.find(q).limit(req.query.limit ? req.query.limit * 1 : 5).sort({datetime: -1})
     .exec().then(journals => {
