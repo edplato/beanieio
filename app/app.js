@@ -24,10 +24,17 @@ const config = {
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
 
-const gCloudConfig = process.env.GCLOUD ? {
-  projectId: JSON.parse(process.env.GCLOUD).project_id;
-  credentials: JSON.parse(process.env.GCLOUD) || undefined;
-} : undefined;
+const gCloudConfig;
+
+if (process.env.GCLOUD) {
+  console.log('INSIDE IF');
+  let gCloud = JSON.parse(process.env.GCLOUD);
+
+  gCloudConfig = {
+    projectId: gCloud.project_id,
+    credentials: gCloud
+  };
+}
 
 const Language = require('@google-cloud/language')(gCloudConfig || config);
 const language = Language;
