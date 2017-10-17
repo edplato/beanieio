@@ -17,7 +17,6 @@ const Clarifai = require('clarifai');
 const configKey = tryRequire('../../config/config.js');
 
 // Google Cloud
-console.log('GCLOUD-->', JSON.parse(process.env.GCLOUD), typeof process.env.GCLOUD);
 
 const config = {
   projectId: 'testproject-173217',
@@ -25,11 +24,9 @@ const config = {
 };
 
 let gCloudConfig;
-
 if (process.env.GCLOUD) {
   console.log('INSIDE IF');
   let gCloud = JSON.parse(process.env.GCLOUD);
-
   gCloudConfig = {
     projectId: gCloud.project_id,
     credentials: gCloud
