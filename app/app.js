@@ -24,7 +24,7 @@ const config = {
   keyFilename: './config/testproject-0ec8021d1e1c.json'
 };
 
-const gCloudConfig;
+let gCloudConfig;
 
 if (process.env.GCLOUD) {
   console.log('INSIDE IF');
